@@ -1,100 +1,133 @@
-# XToys ESP32-C3 WebSocket Controller
+# XToys ESP32-C3 WebSocket Controller v2
 
-A multi-mode WebSocket controller for ESP32-C3 Super Mini that interfaces with the [XToys](https://xtoys.app) web application to control various devices via DRV8833 motor driver and optocouplers.
+A multi-mode WebSocket controller for ESP32-C3 Super Mini that interfaces with [XToys](https://xtoys.app) to control various pleasure devices via DRV8833 motor driver and optocouplers.
 
-## Features
+## Modes
 
-- **5 Operating Modes**: Basic Vibrator, Dual Vibrator, Stroker, Milking Machine, Edge-O-Matic
-- **DRV8833 Motor Driver**: Dual H-bridge for bidirectional motor control
-- **3 Optocoupler Outputs**: Button simulation for external device control
-- **WiFi Captive Portal**: Easy network configuration
-- **RGB LED Status**: Visual feedback for connection state and mode
-- **Persistent Settings**: Mode and WiFi saved to flash
+| # | Mode | LED Color | Motor A | Motor B | Optocouplers |
+|---|------|-----------|---------|---------|--------------|
+| 1 | **Vibe & Suck** | Magenta | Vibration intensity | Suction pump | - |
+| 2 | **Full Machine** | Orange | Thrust speed | Rotation speed | Vibe/Suck/Power buttons |
+| 3 | **Handjob Sim** | Cyan | Oscillating stroke | Vibration | - |
+| 4 | **Blowjob Sim** | Hot Pink | Pulsing suction | Tongue/movement | - |
+| 5 | **Tease Mode** | Purple | Auto vibe (edging) | Auto suction | - |
 
 ## Hardware
 
-| Component | Purpose |
-|-----------|---------|
-| ESP32-C3 Super Mini | Main controller |
-| DRV8833 | Dual motor driver (1.5A/channel) |
-| PC817 Optocouplers (x3) | Button simulation |
-| 220Ω Resistors (x3) | Optocoupler current limiting |
+```
+ESP32-C3 Super Mini
+├── DRV8833 Motor Driver
+│   ├── Motor A (GPIO2/3) - Primary motor
+│   └── Motor B (GPIO4/5) - Secondary motor
+└── Optocouplers (for external device button simulation)
+    ├── Vibe Button (GPIO6)
+    ├── Suck Button (GPIO7)
+    └── Power Button (GPIO10)
+```
 
 ## Wiring
 
 ```
-ESP32-C3          DRV8833
-────────          ───────
-GPIO2  ────────►  AIN1
-GPIO3  ────────►  AIN2
-GPIO4  ────────►  BIN1
-GPIO5  ────────►  BIN2
+ESP32-C3          DRV8833              MOTORS
+────────          ───────              ──────
+GPIO2  ────────►  AIN1  ─────────────► Motor A+
+GPIO3  ────────►  AIN2  ─────────────► Motor A-
+GPIO4  ────────►  BIN1  ─────────────► Motor B+
+GPIO5  ────────►  BIN2  ─────────────► Motor B-
 5V     ────────►  VCC
 GND    ────────►  GND
-               VM ◄── Motor power (3-10V)
+                  VM ◄──────────────── Motor Power (3-10V)
 
-Optocouplers:
-GPIO6  ──[220Ω]──► Opto 1
-GPIO7  ──[220Ω]──► Opto 2
-GPIO10 ──[220Ω]──► Opto 3
+Optocouplers (with 220Ω resistors):
+GPIO6  ──[220Ω]──► Opto 1 (Vibe button)
+GPIO7  ──[220Ω]──► Opto 2 (Suck button)
+GPIO10 ──[220Ω]──► Opto 3 (Power button)
 ```
-
-## Modes
-
-| # | Mode | LED Color | Description |
-|---|------|-----------|-------------|
-| 1 | Basic Vibrator | Pink | Single motor intensity |
-| 2 | Dual Vibrator | Purple | Two independent motors |
-| 3 | Stroker | Cyan | Bidirectional position/speed |
-| 4 | Milking Machine | Yellow | Rotation + pulsing suction |
-| 5 | Edge-O-Matic | Orange | Motor + optocoupler triggers |
 
 ## Button Controls
 
-- **Short press**: Cycle modes
-- **Double press**: Show current mode (blinks)
-- **Long press (3s)**: Reset WiFi, enter config mode
+- **Short press** - Cycle through modes
+- **Double press** - Show current mode (color + blinks)
+- **Long press (3s)** - Reset WiFi, enter config mode
 
 ## LED Status
 
-- **Red pulse**: No WiFi connection
-- **Yellow solid**: WiFi OK, waiting for client
-- **Green solid**: Client connected
-- **Purple pulse**: Config mode
+| Color | State |
+|-------|-------|
+| Red pulse | No WiFi connection |
+| Yellow solid | WiFi OK, waiting for XToys |
+| Green solid | Client connected |
+| Purple pulse | Config mode (AP active) |
+| Mode color | Shown briefly on mode change |
 
 ## WebSocket Commands
 
 Connect to `ws://[device-ip]:81`
 
+### Mode 1: Vibe & Suck
 ```json
-{"intensity": 75}
-{"intensity1": 50, "intensity2": 80}
-{"position": 100, "speed": 60}
-{"speed": 70, "suction": 50}
-{"intensity": 80, "trigger1": true}
-{"pulse1": 100}
-{"cmd": "stop"}
+{"vibe": 75, "suck": 50}
+{"intensity": 80}           // Both channels
 ```
 
-Simple format: `75`, `a:50`, `b:80`, `t1:1`
+### Mode 2: Full Machine
+```json
+{"thrust": 70, "rotation": 50}
+{"vibeBtn": true}           // Hold vibe button
+{"vibeBtn": 100}            // Pulse 100ms
+{"suckBtn": true, "powerBtn": 150}
+```
 
-## Required Libraries
+### Mode 3: Handjob Sim
+```json
+{"stroke": 80, "vibe": 60}
+{"speed": 90}               // Stroke speed alias
+```
 
-Install via Arduino IDE Library Manager:
-- `WebSockets` by Markus Sattler
-- `ArduinoJson` by Benoit Blanchon
-- `Adafruit NeoPixel`
+### Mode 4: Blowjob Sim
+```json
+{"suction": 70, "rate": 80, "speed": 50}
+{"depth": 90}               // Suction depth alias
+```
+
+### Mode 5: Tease Mode
+```json
+{"start": true}             // Begin auto-edging
+{"active": false}           // Stop
+{"intensity": 85}           // Set target intensity
+```
+
+### Simple Format
+```
+vibe:75
+suck:50
+stroke:80
+tease:1
+```
+
+## Tease Mode Details
+
+Automated edging with 4 phases:
+1. **Build** (3-8s) - Gradually increases to random target (60-95%)
+2. **Hold** (2-5s) - Maintains peak with random vibe bursts
+3. **Drop** (0.5-2s) - Quick decrease
+4. **Rest** (1-4s) - Low random stimulation
+
+LED pulses green with intensity, adds blue at >80%.
 
 ## Setup
 
-1. Flash the firmware to ESP32-C3
-2. Connect to WiFi: `XToys-ESP32-Setup`
-3. Configure at `192.168.4.1`
-4. Connect XToys to `ws://[device-ip]:81`
+1. Flash firmware to ESP32-C3
+2. Connect to WiFi `XToys-ESP32-Setup`
+3. Open `192.168.4.1` in browser
+4. Select network and default mode
+5. Connect XToys to `ws://[device-ip]:81`
 
-## Documentation
+## Required Libraries
 
-See `XToys_ESP32_Documentation.html` for detailed wiring diagrams, flowcharts, and mode explanations.
+- `WebSockets` by Markus Sattler
+- `ArduinoJson` by Benoit Blanchon
+- `Adafruit NeoPixel`
 
 ## License
 
