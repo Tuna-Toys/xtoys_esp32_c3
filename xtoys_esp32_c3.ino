@@ -101,6 +101,20 @@ bool ledPulseUp = true;
 String wifiSSID = "";
 String wifiPass = "";
 
+// ===================== FORWARD DECLARATIONS =====================
+void setLED(uint8_t r, uint8_t g, uint8_t b);
+void updateLED();
+void stopAll();
+void connectWiFi();
+void startConfigMode();
+void handleButton();
+void cycleMode();
+void showModeColor();
+void blinkMode();
+void wsEvent(uint8_t num, WStype_t type, uint8_t* payload, size_t len);
+void sendDeviceInfo(uint8_t num);
+void handleCommand(char* payload);
+
 // ===================== HTML =====================
 const char CONFIG_HTML[] PROGMEM = R"(
 <!DOCTYPE html>
