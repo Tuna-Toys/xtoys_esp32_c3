@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XToys ESP32-C3 Controller Documentation</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+    }
+
+    h1 {
+      color: #d63384;
+      border-bottom: 3px solid #d63384;
+      padding-bottom: 10px;
+      margin-top: 0;
+    }
+
+    h2 {
+      color: #6f42c1;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 8px;
+      margin-top: 30px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      color: #495057;
+      margin-top: 25px;
+      page-break-after: avoid;
+    }
+
+    .cover {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      page-break-after: always;
+    }
+
+    .cover h1 {
+      color: white;
+      border: none;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .cover .subtitle {
+      font-size: 1.3em;
+      opacity: 0.9;
+    }
+
+    .cover .version {
+      margin-top: 40px;
+      opacity: 0.8;
+    }
+
+    .toc {
+      background: #f8f9fa;
+      padding: 20px 30px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      page-break-after: always;
+    }
+
+    .toc h2 {
+      margin-top: 0;
+      border: none;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .toc li {
+      padding: 8px 0;
+      border-bottom: 1px dotted #dee2e6;
+    }
+
+    .toc a {
+      color: #495057;
+      text-decoration: none;
+    }
+
+    .diagram {
+      background: #1a1a2e;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.4;
+      white-space: pre;
+      margin: 20px 0;
+    }
+
+    .flowchart {
+      background: #f0f4f8;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      line-height: 1.3;
+      white-space: pre;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #6f42c1;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .mode-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-left: 4px solid #6f42c1;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      page-break-inside: avoid;
+    }
+
+    .mode-card h3 {
+      margin-top: 0;
+      color: #6f42c1;
+    }
+
+    .mode-card .color-badge {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 2px solid #333;
+    }
+
+    code {
+      background: #e9ecef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    .warning {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .info {
+      background: #cfe2ff;
+      border-left: 4px solid #0d6efd;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .success {
+      background: #d1e7dd;
+      border-left: 4px solid #198754;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .led-status {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .led-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 20px;
+    }
+
+    .led-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .section {
+      page-break-inside: avoid;
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+    ul, ol {
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .pin-table td:first-child {
+      font-weight: bold;
+      color: #6f42c1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Page -->
+  <div class="cover">
+    <h1>XToys ESP32-C3 Controller</h1>
+    <div class="subtitle">WebSocket-Based Multi-Mode Device Controller</div>
+    <div class="subtitle">with DRV8833 Motor Driver & Optocoupler Integration</div>
+    <div class="version">
+      <p>Documentation v1.0</p>
+      <p>For ESP32-C3 Super Mini</p>
+    </div>
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li>1. System Overview</li>
+      <li>2. Hardware Requirements</li>
+      <li>3. Wiring Diagrams</li>
+      <li>4. Process Flow</li>
+      <li>5. Logic Flow Diagrams</li>
+      <li>6. Operating Modes</li>
+      <li>7. LED Status Indicators</li>
+      <li>8. Button Controls</li>
+      <li>9. WebSocket Protocol</li>
+      <li>10. WiFi Configuration</li>
+      <li>11. Troubleshooting</li>
+    </ul>
+  </div>
+
+  <!-- Section 1: System Overview -->
+  <h2>1. System Overview</h2>
+
+  <p>The XToys ESP32-C3 Controller is a versatile WebSocket-based device that interfaces with the XToys web application to control various adult devices. The system supports multiple operation modes, allowing a single hardware platform to emulate different device types.</p>
+
+  <h3>Key Features</h3>
+  <ul>
+    <li><strong>5 Operation Modes:</strong> Basic Vibrator, Dual Vibrator, Stroker, Milking Machine, Edge-O-Matic</li>
+    <li><strong>WiFi Configuration:</strong> Captive portal for easy network setup</li>
+    <li><strong>DRV8833 Motor Driver:</strong> Dual H-bridge for bidirectional motor control</li>
+    <li><strong>Optocoupler Outputs:</strong> 3 channels for button simulation on external devices</li>
+    <li><strong>RGB LED Feedback:</strong> Visual status indication for connection and mode</li>
+    <li><strong>Persistent Settings:</strong> Mode and WiFi credentials saved to flash</li>
+    <li><strong>WebSocket Server:</strong> Real-time bidirectional communication on port 81</li>
+  </ul>
+
+  <div class="info">
+    <strong>Compatibility:</strong> This firmware is designed for the ESP32-C3 Super Mini board but can be adapted for other ESP32 variants with minor pin modifications.
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 2: Hardware Requirements -->
+  <h2>2. Hardware Requirements</h2>
+
+  <h3>Components List</h3>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>Quantity</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>ESP32-C3 Super Mini</td>
+      <td>1</td>
+      <td>Main microcontroller with built-in WiFi</td>
+    </tr>
+    <tr>
+      <td>DRV8833 Motor Driver</td>
+      <td>1</td>
+      <td>Dual H-bridge, 1.5A per channel</td>
+    </tr>
+    <tr>
+      <td>PC817 Optocoupler</td>
+      <td>3</td>
+      <td>For button simulation (or similar)</td>
+    </tr>
+    <tr>
+      <td>DC Motors</td>
+      <td>1-2</td>
+      <td>Vibration motors, gear motors, etc.</td>
+    </tr>
+    <tr>
+      <td>220Ω Resistors</td>
+      <td>3</td>
+      <td>Current limiting for optocouplers</td>
+    </tr>
+    <tr>
+      <td>Power Supply</td>
+      <td>1</td>
+      <td>5V for ESP32, 3-10V for motors (VM)</td>
+    </tr>
+  </table>
+
+  <h3>ESP32-C3 Super Mini Pinout Reference</h3>
+  <table class="pin-table">
+    <tr>
+      <th>GPIO</th>
+      <th>Function</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>GPIO8</td>
+      <td>WS2812 LED</td>
+      <td>Built-in RGB LED (active)</td>
+    </tr>
+    <tr>
+      <td>GPIO9</td>
+      <td>BOOT Button</td>
+      <td>Built-in button (active LOW)</td>
+    </tr>
+    <tr>
+      <td>GPIO2</td>
+      <td>Motor A IN1</td>
+      <td>DRV8833 AIN1</td>
+    </tr>
+    <tr>
+      <td>GPIO3</td>
+      <td>Motor A IN2</td>
+      <td>DRV8833 AIN2</td>
+    </tr>
+    <tr>
+      <td>GPIO4</td>
+      <td>Motor B IN1</td>
+      <td>DRV8833 BIN1</td>
+    </tr>
+    <tr>
+      <td>GPIO5</td>
+      <td>Motor B IN2</td>
+      <td>DRV8833 BIN2</td>
+    </tr>
+    <tr>
+      <td>GPIO6</td>
+      <td>Opto 1</td>
+      <td>Button simulation channel 1</td>
+    </tr>
+    <tr>
+      <td>GPIO7</td>
+      <td>Opto 2</td>
+      <td>Button simulation channel 2</td>
+    </tr>
+    <tr>
+      <td>GPIO10</td>
+      <td>Opto 3</td>
+      <td>Button simulation channel 3</td>
+    </tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- Section 3: Wiring Diagrams -->
+  <h2>3. Wiring Diagrams</h2>
+
+  <h3>3.1 Complete System Wiring</h3>
+  <div class="diagram">
+                              ┌─────────────────────────────────────────────────────────────┐
+                              │                    POWER SUPPLY                              │
+                              │                                                              │
+                              │    ┌─────────┐         ┌─────────┐                          │
+                              │    │  5V DC  │         │ 3-10V   │                          │
+                              │    │ (USB/   │         │ (Motor  │                          │
+                              │    │  Reg)   │         │ Supply) │                          │
+                              │    └────┬────┘         └────┬────┘                          │
+                              │         │                   │                               │
+                              └─────────┼───────────────────┼───────────────────────────────┘
+                                        │                   │
+           ┌────────────────────────────┼───────────────────┼────────────────────────────────┐
+           │                            │                   │                                │
+           │  ┌─────────────────────────┴───────────────────┴─────────────────────────────┐ │
+           │  │                         ESP32-C3 SUPER MINI                                │ │
+           │  │                                                                            │ │
+           │  │   ┌───────────────────────────────────────────────────────────────────┐   │ │
+           │  │   │                          [USB-C]                                   │   │ │
+           │  │   │                             │                                      │   │ │
+           │  │   │   5V ──●                   ●── GND                                │   │ │
+           │  │   │  3V3 ──●    ┌─────────┐   ●── GPIO10 ─────────────► OPTO_3       │   │ │
+           │  │   │   EN ──●    │ ESP32-C3│   ●── GPIO9  (BOOT BUTTON - ACTIVE LOW)  │   │ │
+           │  │   │GPIO4 ──●────│  RISC-V │───●── GPIO8  (WS2812 RGB LED)            │   │ │
+           │  │   │GPIO5 ──●────│   CPU   │───●── GPIO7  ─────────────► OPTO_2       │   │ │
+           │  │   │GPIO6 ──●────│         │───●── GPIO6  ─────────────► OPTO_1       │   │ │
+           │  │   │GPIO7 ──●────│ 160MHz  │───●── GPIO5  ─────────────► DRV_BIN2     │   │ │
+           │  │   │GPIO8 ──●────│         │───●── GPIO4  ─────────────► DRV_BIN1     │   │ │
+           │  │   │GPIO9 ──●────│  WiFi   │───●── GPIO3  ─────────────► DRV_AIN2     │   │ │
+           │  │   │GPIO10──●────│   BLE   │───●── GPIO2  ─────────────► DRV_AIN1     │   │ │
+           │  │   │  GND ──●────└─────────┘───●── GPIO1  (TX)                        │   │ │
+           │  │   │   5V ──●                  ●── GPIO0  (RX)                        │   │ │
+           │  │   │                                                                   │   │ │
+           │  │   └───────────────────────────────────────────────────────────────────┘   │ │
+           │  │                                                                            │ │
+           │  └────────────────────────────────────────────────────────────────────────────┘ │
+           │                                                                                  │
+           └──────────────────────────────────────────────────────────────────────────────────┘
+  </div>
+
+  <h3>3.2 DRV8833 Motor Driver Wiring</h3>
+  <div class="diagram">
+                    ESP32-C3                              DRV8833
+               ┌──────────────┐                     ┌──────────────────┐
+               │              │                     │                  │
+               │       GPIO2 ─┼─────────────────────┼─► AIN1           │
+               │              │                     │                  │           ┌─────────┐
+               │       GPIO3 ─┼─────────────────────┼─► AIN2      AOUT1├───────────┤ MOTOR A │
+               │              │                     │             AOUT2├───────────┤(Vibe/   │
+               │       GPIO4 ─┼─────────────────────┼─► BIN1           │           │ Stroke) │
+               │              │                     │                  │           └─────────┘
+               │       GPIO5 ─┼─────────────────────┼─► BIN2      BOUT1├───────────┐
+               │              │                     │             BOUT2├───────────┤ MOTOR B │
+               │          5V ─┼─────────────────────┼─► VCC            │           │(Suction/│
+               │              │                     │                  │           │ Aux)    │
+               │         GND ─┼──────────┬──────────┼─► GND            │           └─────────┘
+               │              │          │          │                  │
+               └──────────────┘          │          │        VM ◄──────┼─── Motor Power
+                                         │          │                  │    (3V - 10V)
+                                         │          │      nSLEEP ◄────┼─── VCC (or GPIO)
+                                         │          │                  │
+                                         │          │      nFAULT ────►│    (Optional)
+                                         │          │                  │
+                                         │          └──────────────────┘
+                                         │
+                                        ─┴─ GND
+                                        ───
+                                         ─
+
+        ╔══════════════════════════════════════════════════════════════════════════════════╗
+        ║  DRV8833 MOTOR CONTROL TRUTH TABLE                                               ║
+        ╠══════════════╦══════════════╦═══════════════════════════════════════════════════╣
+        ║     IN1      ║     IN2      ║                    RESULT                         ║
+        ╠══════════════╬══════════════╬═══════════════════════════════════════════════════╣
+        ║     PWM      ║      0       ║  Forward at PWM speed                             ║
+        ║      0       ║     PWM      ║  Reverse at PWM speed                             ║
+        ║      0       ║      0       ║  Coast (motor free-spins to stop)                 ║
+        ║      1       ║      1       ║  Brake (motor stops quickly)                      ║
+        ╚══════════════╩══════════════╩═══════════════════════════════════════════════════╝
+  </div>
+
+  <div class="page-break"></div>
+
+  <h3>3.3 Optocoupler Wiring (Button Simulation)</h3>
+  <div class="diagram">
+        ESP32-C3                    PC817 OPTOCOUPLER                    TARGET DEVICE
+    ┌─────────────┐              ┌─────────────────────┐              ┌─────────────────┐
+    │             │              │                     │              │                 │
+    │      GPIO6 ─┼──── R1 ─────┼─►│ LED    ├─────────┼─► GND        │   ┌─────────┐   │
+    │             │     220Ω    │   └───────┘          │              │   │ BUTTON  │   │
+    │             │              │                     │              │   │ CIRCUIT │   │
+    │      GPIO7 ─┼──── R2 ─────┼─►│ LED    ├─────────┼─► GND        │   │         │   │
+    │             │     220Ω    │   └───────┘          │              │   │  ┌───┐  │   │
+    │             │              │  ┌───────┐          │              │   │  │BTN│  │   │
+    │      GPIO10─┼──── R3 ─────┼─►│ LED    ├─────────┼─► GND        │   │  └─┬─┘  │   │
+    │             │     220Ω    │   └───────┘          │              │   │    │    │   │
+    │             │              │                     │              │   │    │    │   │
+    │         GND─┼──────────────┼─────────────────────┼──────────────┼───┼────┴────┼───│
+    │             │              │                     │              │   │         │   │
+    └─────────────┘              │  COLLECTOR ─────────┼──────────────┼──►│ Switch+ │   │
+                                 │      │              │              │   │         │   │
+                                 │      ▼ (Phototrans) │              │   │         │   │
+                                 │  EMITTER ───────────┼──────────────┼──►│ Switch- │   │
+                                 │                     │              │   │         │   │
+                                 └─────────────────────┘              │   └─────────┘   │
+                                                                      │                 │
+                                                                      └─────────────────┘
+
+        ╔═══════════════════════════════════════════════════════════════════════════════╗
+        ║  OPTOCOUPLER OPERATION                                                        ║
+        ╠═══════════════════════════════════════════════════════════════════════════════╣
+        ║  • GPIO LOW  → LED ON  → Phototransistor CONDUCTS → Button "pressed"          ║
+        ║  • GPIO HIGH → LED OFF → Phototransistor OFF      → Button "released"         ║
+        ║                                                                               ║
+        ║  The optocoupler provides electrical isolation between the ESP32 and the      ║
+        ║  target device, protecting both circuits from damage.                         ║
+        ╚═══════════════════════════════════════════════════════════════════════════════╝
+  </div>
+
+  <h3>3.4 Power Distribution</h3>
+  <div class="diagram">
+                                    POWER ARCHITECTURE
+        ┌─────────────────────────────────────────────────────────────────────────────┐
+        │                                                                             │
+        │     USB-C (5V)                              External Motor Supply           │
+        │         │                                        (3V - 10V DC)              │
+        │         ▼                                             │                     │
+        │    ┌─────────┐                                        │                     │
+        │    │  ESP32  │                                        ▼                     │
+        │    │  5V IN  │                                  ┌───────────┐               │
+        │    └────┬────┘                                  │  DRV8833  │               │
+        │         │                                       │    VM     │               │
+        │         ▼                                       └─────┬─────┘               │
+        │    ┌─────────┐                                        │                     │
+        │    │  3.3V   │──────────────────────────────────┐     │                     │
+        │    │   LDO   │                                  │     │                     │
+        │    └────┬────┘                                  ▼     ▼                     │
+        │         │                                  ┌─────────────┐                  │
+        │         ▼                                  │   MOTORS    │                  │
+        │    ┌─────────┐                             │  (3V-10V)   │                  │
+        │    │  GPIO   │                             └─────────────┘                  │
+        │    │ OUTPUTS │                                                              │
+        │    └─────────┘                                                              │
+        │                                                                             │
+        └─────────────────────────────────────────────────────────────────────────────┘
+
+        VOLTAGE NOTES:
+        ─────────────────────────────────────────────────────────────────────────────
+        • ESP32-C3 operates on 3.3V logic (5V tolerant on VIN)
+        • DRV8833 logic follows ESP32 3.3V signals
+        • Motor voltage (VM) is independent - match to your motors
+        • Optocoupler LEDs need current limiting resistors (220Ω @ 3.3V ≈ 10mA)
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 4: Process Flow -->
+  <h2>4. Process Flow</h2>
+
+  <h3>4.1 System Startup Sequence</h3>
+  <div class="flowchart">
+                                        ┌─────────────────┐
+                                        │   POWER ON      │
+                                        │   (Boot)        │
+                                        └────────┬────────┘
+                                                 │
+                                                 ▼
+                                        ┌─────────────────┐
+                                        │  Initialize     │
+                                        │  Hardware:      │
+                                        │  • LED (Red)    │
+                                        │  • Button       │
+                                        │  • PWM channels │
+                                        │  • Optocouplers │
+                                        └────────┬────────┘
+                                                 │
+                                                 ▼
+                                        ┌─────────────────┐
+                                        │  Load Settings  │
+                                        │  from Flash:    │
+                                        │  • WiFi SSID    │
+                                        │  • WiFi Pass    │
+                                        │  • Device Mode  │
+                                        └────────┬────────┘
+                                                 │
+                                                 ▼
+                                     ┌──────────────────────┐
+                                     │  WiFi Credentials    │
+                                     │     Stored?          │
+                                     └──────────┬───────────┘
+                                                │
+                              ┌─────────────────┴─────────────────┐
+                              │ NO                                │ YES
+                              ▼                                   ▼
+                     ┌─────────────────┐                 ┌─────────────────┐
+                     │  Start Config   │                 │  Connect to     │
+                     │  Mode (AP)      │                 │  WiFi Network   │
+                     │                 │                 │                 │
+                     │  LED: Purple    │                 │  LED: Red Pulse │
+                     │  Pulse          │                 │  (Connecting)   │
+                     └────────┬────────┘                 └────────┬────────┘
+                              │                                   │
+                              ▼                                   ▼
+                     ┌─────────────────┐              ┌───────────────────────┐
+                     │  Serve Config   │              │  Connection Success?  │
+                     │  Web Page       │              └───────────┬───────────┘
+                     │  at 192.168.4.1 │                          │
+                     └─────────────────┘               ┌──────────┴──────────┐
+                                                       │ NO                  │ YES
+                                                       ▼                     ▼
+                                              ┌──────────────┐      ┌─────────────────┐
+                                              │ Keep trying  │      │ Start WebSocket │
+                                              │ or wait for  │      │ Server (Port 81)│
+                                              │ long-press   │      │                 │
+                                              │ to reset     │      │ LED: Yellow     │
+                                              └──────────────┘      │ (Waiting)       │
+                                                                    └────────┬────────┘
+                                                                             │
+                                                                             ▼
+                                                                    ┌─────────────────┐
+                                                                    │  MAIN LOOP      │
+                                                                    │  (Ready)        │
+                                                                    └─────────────────┘
+  </div>
+
+  <div class="page-break"></div>
+
+  <h3>4.2 Main Loop Process</h3>
+  <div class="flowchart">
+                                           ┌──────────────────┐
+                                           │    MAIN LOOP     │
+                                           │    (Repeats)     │
+                                           └────────┬─────────┘
+                                                    │
+                           ┌────────────────────────┼────────────────────────┐
+                           │                        │                        │
+                           ▼                        ▼                        ▼
+                  ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+                  │  Handle Button  │      │  WebSocket      │      │  Update LED     │
+                  │  Input          │      │  Processing     │      │  Status         │
+                  └────────┬────────┘      └────────┬────────┘      └────────┬────────┘
+                           │                        │                        │
+                           ▼                        ▼                        │
+              ┌────────────────────────┐  ┌─────────────────┐               │
+              │ Button Press Detected? │  │ Client Message  │               │
+              └────────────┬───────────┘  │ Received?       │               │
+                           │              └────────┬────────┘               │
+             ┌─────────────┴──────────┐            │                        │
+             │                        │  ┌─────────┴─────────┐              │
+             ▼                        ▼  │ YES               │ NO           │
+     ┌──────────────┐        ┌──────────────┐               │              │
+     │ Short Press: │        │ Long Press:  │               ▼              │
+     │ Cycle Mode   │        │ Reset WiFi   │      ┌─────────────┐         │
+     └──────────────┘        │ & Restart    │      │ Parse       │         │
+                             └──────────────┘      │ Command     │         │
+                                                   └──────┬──────┘         │
+                                                          │                │
+                                                          ▼                │
+                                                   ┌─────────────┐         │
+                                                   │ Execute     │         │
+                                                   │ Command:    │         │
+                                                   │ • Set Motor │         │
+                                                   │ • Set Opto  │         │
+                                                   │ • Stop All  │         │
+                                                   └──────┬──────┘         │
+                                                          │                │
+                           ┌──────────────────────────────┴────────────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │  Mode-Specific  │
+                  │  Logic Update   │
+                  │  (Stroker/      │
+                  │   Milking)      │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │  delay(1ms)     │
+                  │  Loop Again     │
+                  └─────────────────┘
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 5: Logic Flow -->
+  <h2>5. Logic Flow Diagrams</h2>
+
+  <h3>5.1 Button Input State Machine</h3>
+  <div class="flowchart">
+                    ┌──────────────────────────────────────────────────────────────┐
+                    │                    BUTTON STATE MACHINE                       │
+                    └──────────────────────────────────────────────────────────────┘
+
+              IDLE                          PRESSED                      RELEASED
+         ┌───────────┐                  ┌───────────┐                 ┌───────────┐
+         │           │  Button Down     │           │  Button Up      │           │
+         │  Waiting  │─────────────────►│  Timing   │────────────────►│ Evaluate  │
+         │           │                  │  Press    │                 │           │
+         └───────────┘                  └─────┬─────┘                 └─────┬─────┘
+              ▲                               │                             │
+              │                               │                             │
+              │                               ▼                             │
+              │                    ┌─────────────────────┐                  │
+              │                    │  Duration > 3000ms? │                  │
+              │                    └──────────┬──────────┘                  │
+              │                               │                             │
+              │              ┌────────────────┴────────────────┐            │
+              │              │ YES                             │ NO         │
+              │              ▼                                 ▼            │
+              │     ┌─────────────────┐               ┌─────────────────┐   │
+              │     │  LONG PRESS     │               │ Record Click    │   │
+              │     │  Clear Settings │               │ Time            │   │
+              │     │  Restart ESP    │               └────────┬────────┘   │
+              │     └─────────────────┘                        │            │
+              │                                                ▼            │
+              │                                     ┌────────────────────┐  │
+              │                                     │ Wait 400ms for    │  │
+              │                                     │ potential 2nd     │  │
+              │                                     │ click             │  │
+              │                                     └─────────┬─────────┘  │
+              │                                               │            │
+              │                               ┌───────────────┴───────────┐│
+              │                               │ 2nd Click?                ││
+              │                               │                           ││
+              │              ┌────────────────┴───────────┐               ││
+              │              │ YES                        │ NO            ││
+              │              ▼                            ▼               ││
+              │     ┌─────────────────┐          ┌─────────────────┐      ││
+              │     │  DOUBLE CLICK   │          │  SINGLE CLICK   │      ││
+              │     │  Show Mode      │          │  Cycle Mode     │      ││
+              │     │  Blink          │          │  Save to Flash  │      ││
+              │     └────────┬────────┘          └────────┬────────┘      ││
+              │              │                            │               ││
+              └──────────────┴────────────────────────────┴───────────────┘│
+                                                                           │
+                                                                           │
+  </div>
+
+  <h3>5.2 WebSocket Message Processing</h3>
+  <div class="flowchart">
+                              ┌─────────────────────────┐
+                              │  WebSocket Message      │
+                              │  Received               │
+                              └───────────┬─────────────┘
+                                          │
+                                          ▼
+                              ┌─────────────────────────┐
+                              │  Try JSON Parse         │
+                              └───────────┬─────────────┘
+                                          │
+                           ┌──────────────┴──────────────┐
+                           │ Valid JSON?                 │
+                           │                             │
+               ┌───────────┴───────────┐   ┌─────────────┴─────────────┐
+               │ YES                   │   │ NO                        │
+               ▼                       │   ▼                           │
+      ┌─────────────────┐              │   ┌─────────────────┐         │
+      │ Process JSON    │              │   │ Process Simple  │         │
+      │ Command         │              │   │ Format          │         │
+      └────────┬────────┘              │   └────────┬────────┘         │
+               │                       │            │                  │
+               ▼                       │            ▼                  │
+      ┌────────────────────┐           │   ┌────────────────────┐      │
+      │ Check for "stop"   │           │   │ Parse "channel:val"│      │
+      │ command?           │           │   │ or single value    │      │
+      └─────────┬──────────┘           │   └─────────┬──────────┘      │
+                │                      │             │                 │
+       ┌────────┴────────┐             │             │                 │
+       │YES              │NO           │             │                 │
+       ▼                 ▼             │             │                 │
+┌──────────────┐  ┌─────────────┐      │             │                 │
+│ Stop All     │  │ Switch on   │      │             │                 │
+│ Motors &     │  │ currentMode │      │             │                 │
+│ Optos        │  └──────┬──────┘      │             │                 │
+└──────────────┘         │             │             │                 │
+                         ▼             │             │                 │
+              ┌─────────────────────────────────────────────────────┐  │
+              │                 MODE-SPECIFIC HANDLERS               │  │
+              ├─────────────────────────────────────────────────────┤  │
+              │  MODE_BASIC_VIBRATOR:                               │  │
+              │    → Parse "intensity/v/value" → setMotorA()        │  │
+              ├─────────────────────────────────────────────────────┤  │
+              │  MODE_DUAL_VIBRATOR:                                │  │
+              │    → Parse "intensity1/v1" → setMotorA()            │  │
+              │    → Parse "intensity2/v2" → setMotorB()            │  │
+              ├─────────────────────────────────────────────────────┤  │
+              │  MODE_STROKER:                                      │  │
+              │    → Parse "position/pos" → Direct motor control    │  │
+              │    → Parse "speed" → Auto-stroke rate               │  │
+              ├─────────────────────────────────────────────────────┤  │
+              │  MODE_MILKING:                                      │  │
+              │    → Parse "speed" → setMotorA() continuous         │  │
+              │    → Parse "suction" → setMotorB() pulsing          │  │
+              ├─────────────────────────────────────────────────────┤  │
+              │  MODE_EDGE_O_MATIC:                                 │  │
+              │    → Parse "intensity/v" → setMotorA()              │  │
+              │    → Parse "trigger1-3/t1-3" → setOpto()            │  │
+              │    → Parse "pulse1-3" → pulseOpto(duration)         │  │
+              └─────────────────────────────────────────────────────┘  │
+  </div>
+
+  <div class="page-break"></div>
+
+  <h3>5.3 Motor Control Logic</h3>
+  <div class="flowchart">
+                              ┌─────────────────────────┐
+                              │  setMotorA(speed)       │
+                              │  speed: -100 to +100    │
+                              └───────────┬─────────────┘
+                                          │
+                                          ▼
+                              ┌─────────────────────────┐
+                              │  Constrain to range     │
+                              │  -100 ≤ speed ≤ +100    │
+                              └───────────┬─────────────┘
+                                          │
+                                          ▼
+                              ┌─────────────────────────┐
+                              │  Calculate PWM value    │
+                              │  pwm = map(|speed|,     │
+                              │        0,100 → 0,255)   │
+                              └───────────┬─────────────┘
+                                          │
+                                          ▼
+                              ┌─────────────────────────┐
+                              │     speed > 0 ?         │
+                              └───────────┬─────────────┘
+                                          │
+               ┌──────────────────────────┼──────────────────────────┐
+               │ YES                      │ NO                       │
+               ▼                          ▼                          │
+      ┌─────────────────┐        ┌─────────────────┐                │
+      │  FORWARD        │        │   speed < 0 ?   │                │
+      │                 │        └────────┬────────┘                │
+      │  IN1 = PWM      │                 │                         │
+      │  IN2 = 0        │     ┌───────────┴───────────┐             │
+      │                 │     │ YES                   │ NO (= 0)    │
+      │  Motor spins    │     ▼                       ▼             │
+      │  forward at     │  ┌──────────────┐    ┌──────────────┐     │
+      │  PWM speed      │  │  REVERSE     │    │  COAST       │     │
+      └─────────────────┘  │              │    │  (STOP)      │     │
+                           │  IN1 = 0     │    │              │     │
+                           │  IN2 = PWM   │    │  IN1 = 0     │     │
+                           │              │    │  IN2 = 0     │     │
+                           │  Motor spins │    │              │     │
+                           │  reverse at  │    │  Motor       │     │
+                           │  PWM speed   │    │  free-spins  │     │
+                           └──────────────┘    └──────────────┘     │
+                                                                    │
+                                                                    │
+          ╔════════════════════════════════════════════════════════════════════╗
+          ║  PWM FREQUENCY: 20kHz                                              ║
+          ║  - Above human hearing range                                       ║
+          ║  - Reduces motor whine/noise                                       ║
+          ║  - Good for vibration motors                                       ║
+          ║                                                                    ║
+          ║  PWM RESOLUTION: 8-bit (0-255)                                    ║
+          ║  - 256 discrete speed levels                                      ║
+          ║  - Sufficient for smooth control                                  ║
+          ╚════════════════════════════════════════════════════════════════════╝
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 6: Operating Modes -->
+  <h2>6. Operating Modes</h2>
+
+  <div class="mode-card">
+    <h3><span class="color-badge" style="background: #FF0080;"></span> Mode 1: Basic Vibrator</h3>
+    <p><strong>Purpose:</strong> Simple single-channel vibration control for basic vibrators and toys.</p>
+
+    <h4>Outputs Used:</h4>
+    <ul>
+      <li><strong>Motor A (GPIO2/3):</strong> Vibration intensity 0-100%</li>
+    </ul>
+
+    <h4>WebSocket Commands:</h4>
+    <div class="code-block">
+{"intensity": 75}          // Set to 75% intensity
+{"v": 50}                  // Alternative: 50%
+{"value": 100}             // Alternative: 100%
+{"cmd": "stop"}            // Stop motor
+"75"                       // Simple format: 75%
+    </div>
+
+    <h4>Behavior:</h4>
+    <p>Motor A runs at the specified intensity. Values 0-100 map linearly to PWM duty cycle. Motor B and optocouplers are not used in this mode.</p>
+  </div>
+
+  <div class="mode-card">
+    <h3><span class="color-badge" style="background: #8000FF;"></span> Mode 2: Dual Vibrator</h3>
+    <p><strong>Purpose:</strong> Independent control of two vibration motors for dual-motor toys.</p>
+
+    <h4>Outputs Used:</h4>
+    <ul>
+      <li><strong>Motor A (GPIO2/3):</strong> Channel 1 intensity</li>
+      <li><strong>Motor B (GPIO4/5):</strong> Channel 2 intensity</li>
+    </ul>
+
+    <h4>WebSocket Commands:</h4>
+    <div class="code-block">
+{"intensity1": 80, "intensity2": 40}    // Independent control
+{"v1": 60, "v2": 90}                    // Alternative format
+{"intensity": 70}                        // Both channels same
+"a:50"                                   // Motor A only (simple)
+"b:75"                                   // Motor B only (simple)
+    </div>
+
+    <h4>Behavior:</h4>
+    <p>Both motors can be controlled independently or together. Useful for toys with separate insertable and external stimulation motors.</p>
+  </div>
+
+  <div class="mode-card">
+    <h3><span class="color-badge" style="background: #00FF80;"></span> Mode 3: Stroker</h3>
+    <p><strong>Purpose:</strong> Bidirectional motor control for stroking/thrusting devices.</p>
+
+    <h4>Outputs Used:</h4>
+    <ul>
+      <li><strong>Motor A (GPIO2/3):</strong> Bidirectional position/speed control</li>
+    </ul>
+
+    <h4>WebSocket Commands:</h4>
+    <div class="code-block">
+{"position": 0}            // Full reverse
+{"position": 50}           // Center/stop
+{"position": 100}          // Full forward
+{"pos": 75, "speed": 80}   // Position with auto-stroke speed
+{"speed": 60}              // Set auto-stroke rate only
+    </div>
+
+    <h4>Behavior:</h4>
+    <p><strong>Direct Mode:</strong> Position 0-100 maps to motor direction (-100 to +100).</p>
+    <p><strong>Auto-Stroke Mode:</strong> When speed > 0, motor automatically oscillates between full forward and reverse at the specified rate.</p>
+
+    <div class="info">
+      <strong>Position Mapping:</strong><br>
+      0 = Full reverse | 50 = Stopped | 100 = Full forward
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="mode-card">
+    <h3><span class="color-badge" style="background: #FFFF00;"></span> Mode 4: Milking Machine</h3>
+    <p><strong>Purpose:</strong> Continuous rotation with pulsing suction simulation.</p>
+
+    <h4>Outputs Used:</h4>
+    <ul>
+      <li><strong>Motor A (GPIO2/3):</strong> Continuous rotation speed</li>
+      <li><strong>Motor B (GPIO4/5):</strong> Pulsing suction motor</li>
+    </ul>
+
+    <h4>WebSocket Commands:</h4>
+    <div class="code-block">
+{"speed": 70}                      // Rotation speed only
+{"suction": 50}                    // Suction intensity only
+{"speed": 80, "suction": 60}       // Both controls
+{"cmd": "stop"}                    // Stop all
+    </div>
+
+    <h4>Behavior:</h4>
+    <table>
+      <tr>
+        <th>Parameter</th>
+        <th>Effect</th>
+      </tr>
+      <tr>
+        <td><code>speed</code></td>
+        <td>Motor A runs continuously at this speed (0-100%)</td>
+      </tr>
+      <tr>
+        <td><code>suction</code></td>
+        <td>Motor B pulses on/off. Higher values = faster pulses + higher intensity</td>
+      </tr>
+    </table>
+
+    <p><strong>Pulse Timing:</strong> Cycle time ranges from 2000ms (suction=1) to 200ms (suction=100). Motor alternates between ON (at suction intensity) and OFF states.</p>
+  </div>
+
+  <div class="mode-card">
+    <h3><span class="color-badge" style="background: #FF4000;"></span> Mode 5: Edge-O-Matic</h3>
+    <p><strong>Purpose:</strong> Combined motor control with button simulation triggers for controlling external devices.</p>
+
+    <h4>Outputs Used:</h4>
+    <ul>
+      <li><strong>Motor A (GPIO2/3):</strong> Main vibration/stimulation</li>
+      <li><strong>Opto 1 (GPIO6):</strong> Trigger/button 1 (power, mode select)</li>
+      <li><strong>Opto 2 (GPIO7):</strong> Trigger/button 2 (intensity up/down)</li>
+      <li><strong>Opto 3 (GPIO10):</strong> Trigger/button 3 (pattern, extra)</li>
+    </ul>
+
+    <h4>WebSocket Commands:</h4>
+    <div class="code-block">
+{"intensity": 80}                           // Motor intensity
+{"v": 60, "trigger1": true}                 // Motor + hold button 1
+{"trigger1": false}                         // Release button 1
+{"t1": true, "t2": true}                    // Hold buttons 1 and 2
+{"pulse1": 100}                             // Press button 1 for 100ms
+{"pulse2": 200, "pulse3": 150}              // Multiple button presses
+{"intensity": 70, "pulse1": 100}            // Combined
+"o1:1"                                      // Simple: opto 1 on
+"t2:0"                                      // Simple: trigger 2 off
+    </div>
+
+    <h4>Optocoupler Operation:</h4>
+    <table>
+      <tr>
+        <th>Command</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <td><code>trigger1: true</code></td>
+        <td>Hold button 1 pressed (until set false)</td>
+      </tr>
+      <tr>
+        <td><code>pulse1: 100</code></td>
+        <td>Press and release button 1 (100ms duration)</td>
+      </tr>
+    </table>
+
+    <div class="warning">
+      <strong>Note:</strong> Pulse commands are blocking - the ESP will wait for the pulse duration before processing the next command. Keep pulse durations short (50-200ms typical).
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 7: LED Status -->
+  <h2>7. LED Status Indicators</h2>
+
+  <p>The built-in WS2812 RGB LED provides visual feedback about the system state:</p>
+
+  <div class="led-status">
+    <div class="led-item">
+      <div class="led-dot" style="background: #ff0000; color: #ff0000;"></div>
+      <span><strong>Red Pulse</strong> - No WiFi connection (attempting to connect)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #ffb400; color: #ffb400;"></div>
+      <span><strong>Yellow Solid</strong> - WiFi connected, waiting for XToys client</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #00ff00; color: #00ff00;"></div>
+      <span><strong>Green Solid</strong> - Client connected, ready for commands</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #ff00ff; color: #ff00ff;"></div>
+      <span><strong>Purple Pulse</strong> - Configuration mode (AP active)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #ff6400; color: #ff6400;"></div>
+      <span><strong>Orange Flash</strong> - Long press detected (releasing will reset)</span>
+    </div>
+  </div>
+
+  <h3>Mode Colors (shown on mode change)</h3>
+  <div class="led-status">
+    <div class="led-item">
+      <div class="led-dot" style="background: #FF0080;"></div>
+      <span>Mode 1: Basic Vibrator (Pink)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #8000FF;"></div>
+      <span>Mode 2: Dual Vibrator (Purple)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #00FF80;"></div>
+      <span>Mode 3: Stroker (Cyan-Green)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #FFFF00;"></div>
+      <span>Mode 4: Milking Machine (Yellow)</span>
+    </div>
+    <div class="led-item">
+      <div class="led-dot" style="background: #FF4000;"></div>
+      <span>Mode 5: Edge-O-Matic (Orange)</span>
+    </div>
+  </div>
+
+  <h3>Mode Indication Blinks</h3>
+  <p>After changing modes or on double-click, the LED will:</p>
+  <ol>
+    <li>Flash the mode color briefly (500ms)</li>
+    <li>Blink white N times, where N = mode number (1-5)</li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <!-- Section 8: Button Controls -->
+  <h2>8. Button Controls</h2>
+
+  <p>The BOOT button (GPIO9) provides all user interaction:</p>
+
+  <table>
+    <tr>
+      <th>Action</th>
+      <th>Duration</th>
+      <th>Result</th>
+    </tr>
+    <tr>
+      <td><strong>Short Press</strong></td>
+      <td>50ms - 400ms</td>
+      <td>Cycle to next mode (wraps from 5 → 1)</td>
+    </tr>
+    <tr>
+      <td><strong>Double Press</strong></td>
+      <td>Two presses within 400ms</td>
+      <td>Display current mode (color + blink count)</td>
+    </tr>
+    <tr>
+      <td><strong>Long Press</strong></td>
+      <td>> 3 seconds</td>
+      <td>Clear WiFi settings and restart in config mode</td>
+    </tr>
+  </table>
+
+  <h3>Visual Feedback During Button Press</h3>
+  <ul>
+    <li><strong>0 - 1.5 seconds:</strong> Normal LED status shown</li>
+    <li><strong>1.5 - 3 seconds:</strong> LED flashes orange (warning: about to reset)</li>
+    <li><strong>> 3 seconds:</strong> Settings cleared, ESP restarts</li>
+  </ul>
+
+  <div class="warning">
+    <strong>Warning:</strong> Long press will erase your WiFi credentials! You'll need to reconfigure via the captive portal.
+  </div>
+
+  <!-- Section 9: WebSocket Protocol -->
+  <h2>9. WebSocket Protocol</h2>
+
+  <h3>Connection</h3>
+  <div class="code-block">
+URL: ws://[ESP32-IP]:81
+Example: ws://192.168.1.100:81
+  </div>
+
+  <h3>Device Info (sent on connect)</h3>
+  <div class="code-block">
+{
+  "type": "deviceInfo",
+  "mode": "Basic Vibrator",
+  "modeId": 0,
+  "ip": "192.168.1.100",
+  "features": ["intensity"]
+}
+  </div>
+
+  <h3>Command Format</h3>
+  <p>Commands can be sent in two formats:</p>
+
+  <h4>JSON Format (Recommended)</h4>
+  <div class="code-block">
+{"intensity": 75}
+{"intensity1": 50, "intensity2": 80}
+{"position": 100, "speed": 60}
+{"speed": 70, "suction": 50}
+{"intensity": 80, "trigger1": true, "pulse2": 100}
+{"cmd": "stop"}
+  </div>
+
+  <h4>Simple Format</h4>
+  <div class="code-block">
+75           → Motor A at 75%
+a:50         → Motor A at 50%
+b:80         → Motor B at 80%
+m1:60        → Motor 1 at 60%
+t1:1         → Trigger 1 ON
+o2:0         → Opto 2 OFF
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Section 10: WiFi Configuration -->
+  <h2>10. WiFi Configuration</h2>
+
+  <h3>Initial Setup</h3>
+  <ol>
+    <li>Power on the ESP32-C3 (LED will pulse purple)</li>
+    <li>Connect to WiFi network: <code>XToys-ESP32-Setup</code></li>
+    <li>Open browser to <code>http://192.168.4.1</code> (or wait for captive portal)</li>
+    <li>Select your WiFi network from the scan list</li>
+    <li>Enter password and select default mode</li>
+    <li>Click "Save & Connect"</li>
+    <li>Device will restart and connect to your network</li>
+  </ol>
+
+  <h3>Finding the Device IP</h3>
+  <ul>
+    <li>Check your router's DHCP client list</li>
+    <li>Use a network scanner app</li>
+    <li>Connect serial monitor (115200 baud) - IP is printed on connect</li>
+  </ul>
+
+  <h3>Resetting WiFi Settings</h3>
+  <ol>
+    <li>Hold the BOOT button for 3+ seconds</li>
+    <li>LED will flash orange as warning</li>
+    <li>Release after 3 seconds</li>
+    <li>Device restarts in config mode (purple pulse)</li>
+  </ol>
+
+  <!-- Section 11: Troubleshooting -->
+  <h2>11. Troubleshooting</h2>
+
+  <table>
+    <tr>
+      <th>Symptom</th>
+      <th>Possible Cause</th>
+      <th>Solution</th>
+    </tr>
+    <tr>
+      <td>LED stays red (pulsing)</td>
+      <td>Cannot connect to WiFi</td>
+      <td>Check SSID/password, move closer to router, long-press to reset</td>
+    </tr>
+    <tr>
+      <td>LED yellow but no connection</td>
+      <td>WebSocket client not connecting</td>
+      <td>Verify IP address, check firewall, ensure port 81 accessible</td>
+    </tr>
+    <tr>
+      <td>Motors not responding</td>
+      <td>Wrong mode selected</td>
+      <td>Short-press to cycle modes, check command format</td>
+    </tr>
+    <tr>
+      <td>Motors weak/no power</td>
+      <td>Insufficient motor voltage</td>
+      <td>Check VM power supply (3-10V), verify DRV8833 wiring</td>
+    </tr>
+    <tr>
+      <td>Optocouplers not triggering</td>
+      <td>Wrong mode or polarity</td>
+      <td>Ensure Edge-O-Matic mode, check target device polarity</td>
+    </tr>
+    <tr>
+      <td>Device resets randomly</td>
+      <td>Power supply issue</td>
+      <td>Use quality USB power, add capacitors to motor supply</td>
+    </tr>
+  </table>
+
+  <div class="success">
+    <strong>Serial Debug:</strong> Connect to the ESP32's USB port and open a serial monitor at 115200 baud to see detailed debug output including received commands, connection status, and error messages.
+  </div>
+
+  <hr style="margin-top: 50px;">
+  <p style="text-align: center; color: #666; font-size: 12px;">
+    XToys ESP32-C3 Controller Documentation v1.0<br>
+    For ESP32-C3 Super Mini with DRV8833 Motor Driver
+  </p>
+
+</body>
+</html>
